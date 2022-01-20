@@ -1,0 +1,23 @@
+body {
+  color: #c0392b;
+}
+
+.hidden {
+  display: none;
+}
+
+.status {
+  margin: 1rem;
+}
+
+.status .question {
+  margin-bottom: 0.3rem;
+}
+
+input[type=submit] {
+  padding: 0.5rem;
+}
+
+.status form {
+  margin-top: 0.3rem;
+}

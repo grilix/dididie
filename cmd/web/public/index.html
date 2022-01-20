@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>A static page</title>
+	<link rel="stylesheet" href="/stylesheets/main.css">
+</head>
+<body>
+	<h1>Did I die today?</h1>
+
+	<div>
+		<form action="#" id="query-form" method="POST">
+			<input type="hidden" name="id" />
+
+			<fieldset>
+				<label for="query-name">Who are you?</label>
+				<input placeholder="Name" title="Your name today" name="name" id="query-name" />
+
+				<input type="submit" value="query" />
+			</fieldset>
+		</form>
+	</div>
+
+	<div class="status status-died hidden">
+		<div class="question">Died?</div>
+		<div class="answer">Yup.</div>
+	</div>
+
+	<div class="status status-neverDied hidden">
+		<div class="question">Died?</div>
+		<div class="answer">Nope.</div>
+
+		<form action="#" id="start-form" method="POST">
+			<input type="submit" value="fix" />
+		</form>
+	</div>
+
+	<div class="status status-notDied hidden">
+		<div class="question">Died?</div>
+		<div class="answer">Not today.</div>
+
+		<form action="#" id="die-form" method="POST">
+			<input type="submit" value="die" />
+		</form>
+	</div>
+
+	<script type="module" src="/javascript/client.js"></script>
+	<script type="module" src="/javascript/index.js"></script>
+</body>
+</html>
