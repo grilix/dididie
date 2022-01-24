@@ -1,7 +1,7 @@
 # Did I die today?
 
 This system is depressing and you feel like dying everyday, but you
-so much to worry about that you can't remember if you already died.
+have so much to worry about that you can't remember if you already died.
 
 Stop wasting time and energy right now! Here's the tool you needed:
 
