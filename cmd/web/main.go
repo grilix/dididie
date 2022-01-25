@@ -1,10 +1,11 @@
-/////// This should be something else
-
 package main
 
 import (
+	"embed"
 	"flag"
 	"fmt"
+	"html/template"
+	"io/fs"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,9 +14,13 @@ import (
 	"github.com/go-kit/log"
 )
 
+//go:embed static templates
+var files embed.FS
+
 func main() {
 	var (
 		webAddr = flag.String("web.addr", ":8088", "Web HTTP listen address")
+		apiURL  = flag.String("api.url", "http://localhost:8080", "URL where the API dies")
 	)
 	flag.Parse()
 
@@ -26,7 +31,14 @@ func main() {
 		logger = log.With(logger, "caller", log.DefaultCaller)
 	}
 
-	fs := http.FileServer(http.Dir("./cmd/web/public"))
+	static, err := fs.Sub(files, "static")
+	if err != nil {
+		panic(err)
+	}
+	t, err := template.ParseFS(files, "templates/index.html")
+	if err != nil {
+		panic(err)
+	}
 
 	errs := make(chan error)
 
@@ -38,7 +50,17 @@ func main() {
 
 	go func() {
 		logger.Log("transport", "HTTP", "addr", *webAddr)
-		http.Handle("/", fs)
+		http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(static))))
+		http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+			if req.URL.Path != "/" {
+				http.NotFound(w, req)
+				return
+			}
+			w.Header().Add("Content-Type", "text/html")
+			t.Execute(w, struct {
+				APIUrl string
+			}{APIUrl: *apiURL})
+		})
 		errs <- http.ListenAndServe(*webAddr, nil)
 	}()
 

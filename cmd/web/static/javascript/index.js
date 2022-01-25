@@ -19,7 +19,7 @@ const showElements = (elements) => {
   elements.forEach(e => e.classList.remove('hidden'));
 };
 
-const showStatus = (profile) => {
+const showStatus = (queryForm, profile) => {
   queryForm.elements.id.value = profile.id;
 
   q('.status').forEach(e => e.classList.add('hidden'));
@@ -46,22 +46,24 @@ const onSubmitForm = (form, fn) => {
   });
 };
 
-const client = createClient('http://localhost:8080');
+export const startApp = (apiURL) => {
+  const client = createClient(apiURL);
 
-const queryForm = document.getElementById('query-form');
+  const queryForm = document.getElementById('query-form');
 
-onSubmitForm(queryForm, () => {
-  client.query(queryForm.elements.name.value).then(showStatus);
-});
+  onSubmitForm(queryForm, () => {
+    client.query(queryForm.elements.name.value).then(profile => showStatus(queryForm, profile));
+  });
 
-const dieForm = document.getElementById('die-form');
+  const dieForm = document.getElementById('die-form');
 
-onSubmitForm(dieForm, () => {
-  client.die(queryForm.elements.id.value).then(showStatus);
-});
+  onSubmitForm(dieForm, () => {
+    client.die(queryForm.elements.id.value).then(profile => showStatus(queryForm, profile));
+  });
 
-const startForm = document.getElementById('start-form');
+  const startForm = document.getElementById('start-form');
 
-onSubmitForm(startForm, () => {
-  client.start(queryForm.elements.name.value).then(showStatus);
-});
+  onSubmitForm(startForm, () => {
+    client.start(queryForm.elements.name.value).then(profile => showStatus(queryForm, profile));
+  });
+};
